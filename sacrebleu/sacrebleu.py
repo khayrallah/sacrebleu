@@ -563,6 +563,9 @@ def sentence_bleu(hypothesis: str,
                   references: List[str],
                   smooth_method: str = 'floor',
                   smooth_value: float = None,
+                  force: bool = False,
+                  lowercase: bool = False,
+                  tokenize=DEFAULT_TOKENIZER,
                   use_effective_order: bool = True) -> BLEU:
     """
     Computes BLEU on a single sentence pair.
@@ -573,12 +576,18 @@ def sentence_bleu(hypothesis: str,
     :param hypothesis: Hypothesis string.
     :param reference: Reference string.
     :param smooth_value: For 'floor' smoothing, the floor value to use.
+    :param force: Ignore data that looks already tokenized
+    :param lowercase: Lowercase the data
+    :param tokenize: The tokenizer to use
     :param use_effective_order: Account for references that are shorter than the largest n-gram.
     :return: Returns a single BLEU score as a float.
     """
     bleu = corpus_bleu(hypothesis, references,
                        smooth_method=smooth_method,
                        smooth_value=smooth_value,
+                       force=force,
+                       lowercase=lowercase,
+                       tokenize=tokenize,
                        use_effective_order=use_effective_order)
     return bleu
 
@@ -600,6 +609,7 @@ def corpus_bleu(sys_stream: Union[str, Iterable[str]],
     :param force: Ignore data that looks already tokenized
     :param lowercase: Lowercase the data
     :param tokenize: The tokenizer to use
+    :param use_effective_order: Account for references that are shorter than the largest n-gram.
     :return: a BLEU object containing everything you'd want
     """
 
